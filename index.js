@@ -73,6 +73,36 @@ async function run() {
 
 
 
+         //UPDATE API
+         app.put('/orderedmeals/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    orderStatus: updatedUser.orderStatus,
+                },
+            };
+            const result = await orderedMeals.updateOne(filter, updateDoc, options)
+            console.log('updating', id)
+            res.json(result)
+        })
+
+      
+        // DELETE API 
+        app.delete('/orderedmeals/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderedMeals.deleteOne(query);
+
+            console.log('deleting user with id ', result);
+
+            res.json(result);
+        })
+
+
+
     } finally {
     //   await client.close();
     }
@@ -86,7 +116,3 @@ app.get('/',(req,res)=>{
 app.listen(port,()=>{
     console.log('this port is run on:',port);
 })
-
-
-// saheeb_tareque
-// DsrqV7E1ZQL3KnyQ
